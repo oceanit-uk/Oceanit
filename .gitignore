@@ -1,0 +1,12 @@
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Videos folder (if needed in future)
+/videos/
+*.mp4
+*.mov
+*.avi
