@@ -9,6 +9,131 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 require_once '../db_connect.php';
 
+/**
+ * Compress and resize image to approximately 600KB
+ * @param string $source_path Path to source image
+ * @param string $target_path Path to save compressed image
+ * @param int $max_size_kb Maximum file size in KB (default: 600)
+ * @return bool True on success, False on failure
+ */
+function compressImage($source_path, $target_path, $max_size_kb = 600) {
+    // Check if GD library is available
+    if (!function_exists('imagecreatefromjpeg')) {
+        return false;
+    }
+    
+    // Get image info
+    $image_info = getimagesize($source_path);
+    if ($image_info === false) {
+        return false;
+    }
+    
+    $mime_type = $image_info['mime'];
+    $original_width = $image_info[0];
+    $original_height = $image_info[1];
+    
+    // Maximum width for web (1920px is good for most displays)
+    $max_width = 1920;
+    $max_height = 1920;
+    
+    // Calculate new dimensions if image is too large
+    $ratio = min($max_width / $original_width, $max_height / $original_height, 1);
+    $new_width = (int)($original_width * $ratio);
+    $new_height = (int)($original_height * $ratio);
+    
+    // Create image resource based on type
+    switch ($mime_type) {
+        case 'image/jpeg':
+            $source_image = imagecreatefromjpeg($source_path);
+            break;
+        case 'image/png':
+            $source_image = imagecreatefrompng($source_path);
+            break;
+        case 'image/gif':
+            $source_image = imagecreatefromgif($source_path);
+            break;
+        case 'image/webp':
+            if (function_exists('imagecreatefromwebp')) {
+                $source_image = imagecreatefromwebp($source_path);
+            } else {
+                return false;
+            }
+            break;
+        default:
+            return false;
+    }
+    
+    if ($source_image === false) {
+        return false;
+    }
+    
+    // Create new image with calculated dimensions
+    $new_image = imagecreatetruecolor($new_width, $new_height);
+    
+    // Preserve transparency for PNG and GIF
+    if ($mime_type == 'image/png' || $mime_type == 'image/gif') {
+        imagealphablending($new_image, false);
+        imagesavealpha($new_image, true);
+        $transparent = imagecolorallocatealpha($new_image, 0, 0, 0, 127);
+        imagefill($new_image, 0, 0, $transparent);
+    }
+    
+    // Resize image
+    imagecopyresampled($new_image, $source_image, 0, 0, 0, 0, $new_width, $new_height, $original_width, $original_height);
+    
+    // Binary search for quality to achieve target file size
+    $target_size = $max_size_kb * 1024; // Convert to bytes
+    $min_quality = 40;
+    $max_quality = 100;
+    $best_quality = 85;
+    $best_path = '';
+    
+    // Try to find optimal quality
+    for ($quality = $max_quality; $quality >= $min_quality; $quality -= 5) {
+        $temp_path = $target_path . '.tmp';
+        
+        // Save as JPEG (best compression)
+        imagejpeg($new_image, $temp_path, $quality);
+        
+        $file_size = filesize($temp_path);
+        
+        if ($file_size <= $target_size) {
+            $best_quality = $quality;
+            $best_path = $temp_path;
+            break;
+        }
+        
+        // If we're getting close, use this quality
+        if ($file_size <= $target_size * 1.2) {
+            $best_quality = $quality;
+            $best_path = $temp_path;
+            break;
+        }
+        
+        // Clean up temp file if not suitable
+        if (file_exists($temp_path)) {
+            @unlink($temp_path);
+        }
+    }
+    
+    // If we found a suitable quality, move temp file to target
+    if ($best_path && file_exists($best_path)) {
+        if (file_exists($target_path)) {
+            @unlink($target_path);
+        }
+        rename($best_path, $target_path);
+    } else {
+        // Fallback: save with default quality
+        imagejpeg($new_image, $target_path, 85);
+    }
+    
+    // Clean up
+    imagedestroy($source_image);
+    imagedestroy($new_image);
+    
+    return true;
+}
+
 $message = '';
 $message_type = '';
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'portfolio';
@@ -33,11 +158,28 @@ if (isset($_POST['add_portfolio'])) {
         $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         
         if (in_array($file_extension, $allowed_extensions)) {
-            $file_name = uniqid() . '_' . time() . '.' . $file_extension;
+            // Always save as JPEG for better compression
+            $file_name = uniqid() . '_' . time() . '.jpg';
+            $temp_path = $upload_dir . 'temp_' . $file_name;
             $target_path = $upload_dir . $file_name;
             
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
-                $image_path = 'uploads/' . $file_name;
+            // Move uploaded file to temp location first
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $temp_path)) {
+                // Compress and resize image to ~600KB
+                if (compressImage($temp_path, $target_path, 600)) {
+                    // Delete temp file
+                    @unlink($temp_path);
+                    $image_path = 'uploads/' . $file_name;
+                } else {
+                    // If compression fails, try to use original (fallback)
+                    if (file_exists($temp_path)) {
+                        rename($temp_path, $target_path);
+                        $image_path = 'uploads/' . $file_name;
+                    } else {
+                        $message = 'Error compressing image file. Please try again.';
+                        $message_type = 'error';
+                    }
+                }
             } else {
                 $message = 'Error uploading image file. Please try again.';
                 $message_type = 'error';
@@ -86,15 +228,36 @@ if (isset($_POST['edit_portfolio'])) {
         $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         
         if (in_array($file_extension, $allowed_extensions)) {
-            $file_name = uniqid() . '_' . time() . '.' . $file_extension;
+            // Always save as JPEG for better compression
+            $file_name = uniqid() . '_' . time() . '.jpg';
+            $temp_path = $upload_dir . 'temp_' . $file_name;
             $target_path = $upload_dir . $file_name;
             
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
-                // Delete old image if exists
-                if ($old_image && !empty($old_image) && file_exists('../' . $old_image)) {
-                    @unlink('../' . $old_image);
+            // Move uploaded file to temp location first
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $temp_path)) {
+                // Compress and resize image to ~600KB
+                if (compressImage($temp_path, $target_path, 600)) {
+                    // Delete temp file
+                    @unlink($temp_path);
+                    // Delete old image if exists
+                    if ($old_image && !empty($old_image) && file_exists('../' . $old_image)) {
+                        @unlink('../' . $old_image);
+                    }
+                    $image_path = 'uploads/' . $file_name;
+                } else {
+                    // If compression fails, try to use original (fallback)
+                    if (file_exists($temp_path)) {
+                        rename($temp_path, $target_path);
+                        // Delete old image if exists
+                        if ($old_image && !empty($old_image) && file_exists('../' . $old_image)) {
+                            @unlink('../' . $old_image);
+                        }
+                        $image_path = 'uploads/' . $file_name;
+                    } else {
+                        $message = 'Error compressing image file. Please try again.';
+                        $message_type = 'error';
+                    }
                 }
-                $image_path = 'uploads/' . $file_name;
             } else {
                 $message = 'Error uploading image file. Please try again.';
                 $message_type = 'error';

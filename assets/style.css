@@ -400,20 +400,21 @@ body {
    ======================================== */
 
 .section {
-    padding: 6rem 0;
+    padding: 4rem 0;
     position: relative;
+    will-change: transform;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
 }
 
 .section-title {
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     color: var(--white);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     letter-spacing: -0.5px;
 }
 
@@ -421,7 +422,7 @@ body {
     width: 80px;
     height: 4px;
     background: linear-gradient(90deg, var(--secondary-color), transparent);
-    margin: 0 auto 1.5rem;
+    margin: 0 auto 1rem;
 }
 
 .section-description {
@@ -432,14 +433,66 @@ body {
 }
 
 /* ========================================
-   OUR STORY SECTION
+   OUR STORY SECTION - SPLIT SCREEN
    ======================================== */
 
-.story-content {
+.story-section-split {
+    padding: 0;
+    overflow: hidden;
+}
+
+.story-section-reversed .story-split-container {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Default: Mobile - text first, image second */
+.story-section-reversed .story-left {
+    order: 1;
+}
+
+.story-section-reversed .story-image {
+    order: 2;
+}
+
+/* Desktop: image first (left), text second (right) */
+@media (min-width: 969px) {
+    .story-section-reversed .story-image {
+        order: 1;
+    }
+
+    .story-section-reversed .story-left {
+        order: 2;
+    }
+}
+
+.story-split-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.story-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.story-header {
+    margin-bottom: 2rem;
+}
+
+.story-header .section-title {
+    text-align: left;
+    margin-bottom: 0.75rem;
+}
+
+.story-header .title-underline {
+    margin: 0 0 1rem 0;
 }
 
 .story-text {
@@ -447,9 +500,9 @@ body {
 }
 
 .story-text p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1.1rem;
-    line-height: 1.8;
+    line-height: 1.7;
 }
 
 .lead-text {
@@ -458,39 +511,25 @@ body {
     font-weight: 600;
 }
 
-.story-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+.story-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transform-origin: center;
+    will-change: transform;
 }
 
-.stat-item {
-    text-align: center;
-    padding: 2rem;
-    background-color: var(--accent-color);
-    border-radius: 8px;
-    transition: var(--transition);
-    border: 1px solid rgba(100, 255, 218, 0.1);
-}
-
-.stat-item:hover {
-    transform: translateY(-5px);
-    border-color: var(--secondary-color);
-    box-shadow: var(--shadow-lg);
-}
-
-.stat-number {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--secondary-color);
-    margin-bottom: 0.5rem;
-}
-
-.stat-label {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.1s ease-out;
+    will-change: transform;
 }
 
 /* ========================================
@@ -542,7 +581,7 @@ body {
 
 .service-icon {
     font-size: 4rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     display: block;
 }
 
@@ -550,7 +589,7 @@ body {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--white);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .service-description {
@@ -566,7 +605,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 /* Make portfolio images bigger on larger screens - 2 per row for 100% size increase */
@@ -679,7 +718,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 /* Limit to 4 columns on index page */
@@ -716,20 +755,20 @@ body {
 .review-rating {
     color: var(--secondary-color);
     font-size: 1.2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .review-text {
     color: var(--text-secondary);
     font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 2rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
     font-style: italic;
 }
 
 .review-author {
     border-top: 1px solid rgba(100, 255, 218, 0.1);
-    padding-top: 1.5rem;
+    padding-top: 1rem;
 }
 
 .author-name {
@@ -885,6 +924,7 @@ body {
     animation: fadeInUp 0.8s ease-out;
 }
 
+
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
@@ -911,7 +951,29 @@ body {
         display: flex;
     }
 
-    .story-content,
+    .story-split-container {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    /* Mobile: Ensure text comes first, image second */
+    .story-section-reversed .story-left {
+        order: 1 !important;
+    }
+
+    .story-section-reversed .story-image {
+        order: 2 !important;
+    }
+
+    .story-left {
+        padding: 4rem 2rem;
+    }
+
+    .story-image {
+        height: 60vh;
+        min-height: 400px;
+    }
+
     .contact-content {
         grid-template-columns: 1fr;
     }
@@ -938,6 +1000,15 @@ body {
 
     .section {
         padding: 4rem 0;
+    }
+
+    .story-left {
+        padding: 3rem 1.5rem;
+    }
+
+    .story-image {
+        height: 50vh;
+        min-height: 300px;
     }
 
     .hero-title {

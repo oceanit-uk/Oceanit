@@ -5,6 +5,76 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
+    // #region agent log
+    // Debug: Check mobile viewport and CSS application
+    (function() {
+        const checkMobileView = () => {
+            const viewportWidth = window.innerWidth;
+            const beyondCodeSection = document.getElementById('beyond-code');
+            const storyImage = beyondCodeSection?.querySelector('.story-image');
+            const storyLeft = beyondCodeSection?.querySelector('.story-left');
+            const container = beyondCodeSection?.querySelector('.story-split-container');
+            
+            if (!beyondCodeSection) {
+                fetch('http://127.0.0.1:7242/ingest/6bc21c95-676c-4e04-9434-516cccb9de58', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        location: 'script.js:7',
+                        message: 'Section not found',
+                        data: { viewportWidth },
+                        timestamp: Date.now(),
+                        sessionId: 'debug-session',
+                        runId: 'initial',
+                        hypothesisId: 'A'
+                    })
+                }).catch(() => {});
+                return;
+            }
+            
+            const computedImageOrder = storyImage ? window.getComputedStyle(storyImage).order : 'N/A';
+            const computedTextOrder = storyLeft ? window.getComputedStyle(storyLeft).order : 'N/A';
+            const computedGridCols = container ? window.getComputedStyle(container).gridTemplateColumns : 'N/A';
+            const computedDisplay = container ? window.getComputedStyle(container).display : 'N/A';
+            const isReversed = beyondCodeSection.classList.contains('story-section-reversed');
+            const imageIndex = storyImage ? Array.from(container?.children || []).indexOf(storyImage) : -1;
+            const textIndex = storyLeft ? Array.from(container?.children || []).indexOf(storyLeft) : -1;
+            
+            fetch('http://127.0.0.1:7242/ingest/6bc21c95-676c-4e04-9434-516cccb9de58', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    location: 'script.js:7',
+                    message: 'Mobile view debug check',
+                    data: {
+                        viewportWidth,
+                        isMobile: viewportWidth <= 968,
+                        isReversed,
+                        imageOrder: computedImageOrder,
+                        textOrder: computedTextOrder,
+                        gridColumns: computedGridCols,
+                        display: computedDisplay,
+                        imageDOMIndex: imageIndex,
+                        textDOMIndex: textIndex,
+                        hasImage: !!storyImage,
+                        hasText: !!storyLeft,
+                        imageBeforeText: imageIndex < textIndex && imageIndex >= 0 && textIndex >= 0
+                    },
+                    timestamp: Date.now(),
+                    sessionId: 'debug-session',
+                    runId: 'post-fix',
+                    hypothesisId: 'A,B,C,D,E'
+                })
+            }).catch(() => {});
+        };
+        
+        // Check immediately and on events
+        setTimeout(checkMobileView, 100);
+        window.addEventListener('resize', () => setTimeout(checkMobileView, 100));
+        window.addEventListener('load', () => setTimeout(checkMobileView, 100));
+    })();
+    // #endregion
+    
     // ========================================
     // VIDEO LOAD DETECTION & PLAYBACK SPEED CONTROL (50% speed)
     // ========================================
@@ -299,6 +369,67 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, { passive: true });
     }
+
+    // ========================================
+    // PARALLAX SCROLLING EFFECT FOR SECTIONS
+    // ========================================
+    const parallaxSections = document.querySelectorAll('.section');
+    const storyImages = document.querySelectorAll('.story-image img');
+
+    function applyParallax() {
+        parallaxSections.forEach(section => {
+            // Skip parallax for story sections (handled separately for image only)
+            if (section.id === 'our-story' || section.id === 'beyond-code') {
+                return;
+            }
+
+            const rect = section.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const sectionTop = rect.top;
+            const sectionHeight = rect.height;
+
+            // Only apply parallax when section is in viewport
+            if (sectionTop < viewportHeight && sectionTop + sectionHeight > 0) {
+                // Calculate scroll progress (0 to 1)
+                const scrollProgress = (viewportHeight - sectionTop) / (viewportHeight + sectionHeight);
+                const parallaxOffset = (scrollProgress - 0.5) * 50; // Adjust intensity here
+
+                section.style.transform = `translateY(${parallaxOffset}px)`;
+            }
+        });
+
+        // Special parallax for story images only (not the whole section)
+        storyImages.forEach(storyImage => {
+            const storySection = storyImage.closest('.story-section-split');
+            if (storySection) {
+                const rect = storySection.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+
+                if (rect.top < viewportHeight && rect.bottom > 0) {
+                    const scrollProgress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
+                    const imageOffset = (scrollProgress - 0.5) * 60; // Parallax for image
+                    const scale = 1 + (scrollProgress - 0.5) * 0.08; // Slight scale effect
+
+                    storyImage.style.transform = `translateY(${imageOffset}px) scale(${scale})`;
+                }
+            }
+        });
+    }
+
+    // Throttle scroll events for better performance
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                applyParallax();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    // Initial call
+    applyParallax();
 
     // ========================================
     // STAT COUNTER ANIMATION

@@ -52,9 +52,9 @@ $reviews_index = $reviews_stmt->fetchAll();
             <div class="video-overlay"></div>
         </div>
         <div class="hero-content">
-            <h1 class="hero-title">Oceanit Web Developers</h1>
-            <p class="hero-subtitle">Crafting Digital Excellence, One Pixel at a Time</p>
-            <a href="#services" class="cta-button">Explore Our Services</a>
+            <h1 class="hero-title">Oceanit Web Solutions</h1>
+            <p class="hero-subtitle">Creative, affordable web solutions that work as hard as your business does.</p>
+            <a href="#portfolio" class="cta-button">Explore Our Portfolio</a>
         </div>
         <div class="scroll-indicator">
             <div class="mouse">
@@ -64,32 +64,20 @@ $reviews_index = $reviews_stmt->fetchAll();
     </section>
 
     <!-- Our Story Section -->
-    <section id="our-story" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Our Story</h2>
-                <div class="title-underline"></div>
-            </div>
-            <div class="story-content">
+    <section id="our-story" class="section story-section-split">
+        <div class="story-split-container">
+            <div class="story-left">
+                <div class="story-header">
+                    <h2 class="section-title">Our Story</h2>
+                    <div class="title-underline"></div>
+                </div>
                 <div class="story-text">
-                    <p class="lead-text">Welcome to Oceanit Web Developers, where innovation meets craftsmanship.</p>
-                    <p>We are a passionate team of web developers dedicated to creating exceptional digital experiences. With years of expertise in cutting-edge technologies, we transform ideas into stunning, high-performance websites that drive results.</p>
-                    <p>Our commitment to excellence, attention to detail, and client-focused approach have made us a trusted partner for businesses looking to establish a strong online presence.</p>
+                    <p>We are a husband-and-wife team of Computer Science graduates dedicated to bringing high-end technology to ambitious businesses. We founded Oceanit to bridge the gap between technical engineering and creative storytelling, offering premium, "next-level" digital experiences without the corporate overhead. As a family business, we are personally invested in your growth, ensuring your success drives everything we do.</p>
+                    <p>Our approach combines graduate-level logic with immersive 3D aesthetics and cinematic motion to build websites that are as fast as they are visually stunning. We specialize in making the future of the web affordable, transforming your vision into a cutting-edge reality that elevates your brand. Let's collaborate to create something amazing designed with heart and powered by science.</p>
                 </div>
-                <div class="story-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">500+</div>
-                        <div class="stat-label">Projects Delivered</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">200+</div>
-                        <div class="stat-label">Happy Clients</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">10+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                </div>
+            </div>
+            <div class="story-image">
+                <img src="assets/images/our_story.jpg" alt="Our Story">
             </div>
         </div>
     </section>
@@ -98,40 +86,34 @@ $reviews_index = $reviews_stmt->fetchAll();
     <section id="services" class="section services-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Our Services</h2>
+                <h2 class="section-title">Services</h2>
                 <div class="title-underline"></div>
-                <p class="section-description">Comprehensive web development solutions tailored to your business needs</p>
+                <p class="section-description">Comprehensive Digital Solutions, Engineered for the Modern Brand.</p>
             </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="service-icon">🎨</div>
-                    <h3 class="service-title">Web Design</h3>
-                    <p class="service-description">Stunning, user-centric designs that captivate and convert your audience.</p>
+                    <h3 class="service-title">Next-Gen Website Development</h3>
+                    <p class="service-description">Beyond standard templates. We architect high-performance, immersive websites using 3D aesthetics and cinematic motion. It’s graduate-level engineering meets modern art fast, secure, and visually stunning.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">💻</div>
-                    <h3 class="service-title">Web Development</h3>
-                    <p class="service-description">Robust, scalable websites built with modern technologies and best practices.</p>
+                    <h3 class="service-title">Software Solutions</h3>
+                    <p class="service-description">We build the engine behind your business. From automation tools to complex backend systems, we engineer bespoke software that simplifies your workflow and solves your unique challenges with precision.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">📱</div>
-                    <h3 class="service-title">Responsive Design</h3>
-                    <p class="service-description">Perfect experiences across all devices, from mobile to desktop.</p>
+                    <h3 class="service-title">Mobile App Development</h3>
+                    <p class="service-description">our brand in their pocket. We design and develop sleek, intuitive mobile applications for iOS and Android that focus on seamless user experience and high speed performance.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3 class="service-title">Performance Optimization</h3>
-                    <p class="service-description">Lightning-fast load times and optimized performance for better SEO.</p>
+                    <h3 class="service-title">Strategic Social Media Management</h3>
+                    <p class="service-description">Digital storytelling with an edge. We don't just post, we strategize. We combine data-driven logic with high-end visuals to build your community and turn engagement into real world growth.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">🔒</div>
-                    <h3 class="service-title">Security</h3>
-                    <p class="service-description">Enterprise-grade security to protect your data and your users.</p>
+                    <h3 class="service-title">High-End Graphic Design</h3>
+                    <p class="service-description">Visual identities that demand attention. From modern UI/UX to premium marketing materials, we create a cohesive aesthetic that makes your business look like a global leader from day one.</p>
                 </div>
                 <div class="service-card">
-                    <div class="service-icon">🔄</div>
-                    <h3 class="service-title">Maintenance & Support</h3>
-                    <p class="service-description">Ongoing support and updates to keep your website running smoothly.</p>
+                    <h3 class="service-title">Maintenance & Expert Support</h3>
+                    <p class="service-description">Technology moves fast, we keep you ahead. Our dedicated support ensures your digital assets are always updated, secure, and performing at their peak, so you can focus on running your business.</p>
                 </div>
             </div>
         </div>
@@ -212,6 +194,25 @@ $reviews_index = $reviews_stmt->fetchAll();
         </div>
     </section>
 
+        <!-- Beyond the Code Section -->
+        <section id="beyond-code" class="section story-section-split story-section-reversed">
+        <div class="story-split-container">
+            <div class="story-image">
+                <img src="assets/images/uk.png" alt="Beyond the Code">
+            </div>
+            <div class="story-left">
+                <div class="story-header">
+                    <h2 class="section-title">More than just websites</h2>
+                    <div class="title-underline"></div>
+                </div>
+                <div class="story-text">
+                    <p>In 2026, the success of your business depends on more than just "being online"—it requires a digital experience that commands attention and converts visitors into loyal customers. As a fresh, graduate-led startup, OceanIT is moving away from the outdated agency models of the past. We don't rely on a portfolio of old work; instead, we are driven by the ambition to engineer the most innovative, high-performance websites of today. We believe that your digital presence should be a masterpiece of logic and art, designed to boost your success and, in turn, establish our reputation as the new standard in creative web engineering.</p>
+                    <p>Our philosophy is built on a transparent partnership where we grow only when you do. To jumpstart this vision, we are launching an exclusive initiative for 2026 where we offer comprehensive web development solutions at zero upfront cost for selected businesses that possess a truly creative vision. We handle the entire design and build process for free, allowing you to scale your brand without the heavy financial burden of traditional development. In return, we only require a very low monthly payment to cover our ongoing costs for ultra-fast hosting, domain security, and the expert maintenance required to keep your site at the cutting edge. This stress-free, modern approach ensures that our interests are perfectly aligned: we give you our best work to ensure your success, and your success becomes our greatest achievement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Us Section -->
     <section id="contact-us" class="section contact-section">
         <div class="container">
@@ -252,9 +253,6 @@ $reviews_index = $reviews_stmt->fetchAll();
                         <input type="email" id="email" name="email" placeholder="Your Email" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="subject" name="subject" placeholder="Subject" required>
-                    </div>
-                    <div class="form-group">
                         <textarea id="message" name="message" rows="6" placeholder="Your Message" required></textarea>
                     </div>
                     <button type="submit" class="submit-button">Send Message</button>
@@ -271,7 +269,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                     <img src="assets/images/logo.png" alt="Oceanit Logo" class="logo">
                     <span class="logo-text">Oceanit</span>
                 </div>
-                <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Developers. All rights reserved.</p>
+                <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Solutions. All rights reserved.</p>
             </div>
         </div>
     </footer>
