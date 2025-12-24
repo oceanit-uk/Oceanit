@@ -6,7 +6,7 @@ $portfolio_stmt = $pdo->query("SELECT * FROM portfolio ORDER BY id DESC LIMIT 6"
 $portfolios_index = $portfolio_stmt->fetchAll();
 
 // Fetch limited reviews (4 reviews for index page)
-$reviews_stmt = $pdo->query("SELECT * FROM reviews ORDER BY id DESC LIMIT 4");
+$reviews_stmt = $pdo->query("SELECT * FROM reviews ORDER BY id DESC LIMIT 3");
 $reviews_index = $reviews_stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -127,7 +127,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                 <div class="title-underline"></div>
                 <p class="section-description">Showcasing our finest work and client success stories</p>
             </div>
-            <div class="portfolio-grid">
+            <div class="portfolio-grid portfolio-page-grid">
                 <?php
                 if (empty($portfolios_index)) {
                     echo '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">No portfolio items available yet.</p>';
@@ -168,7 +168,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                 <div class="title-underline"></div>
                 <p class="section-description">What our clients say about working with us</p>
             </div>
-            <div class="reviews-grid">
+            <div class="reviews-grid reviews-page-grid">
                 <?php
                 if (empty($reviews_index)) {
                     echo '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">No reviews available yet.</p>';
@@ -195,10 +195,10 @@ $reviews_index = $reviews_stmt->fetchAll();
     </section>
 
         <!-- Beyond the Code Section -->
-        <section id="beyond-code" class="section story-section-split story-section-reversed">
+        <section id="beyond-code" class="section story-section-split -sectiostoryn-reversed">
         <div class="story-split-container">
             <div class="story-image">
-                <img src="assets/images/uk.png" alt="Beyond the Code">
+                <img src="assets/images/uk.jpg" alt="Beyond the Code">
             </div>
             <div class="story-left">
                 <div class="story-header">
@@ -206,12 +206,13 @@ $reviews_index = $reviews_stmt->fetchAll();
                     <div class="title-underline"></div>
                 </div>
                 <div class="story-text">
-                    <p>In 2026, the success of your business depends on more than just "being online"—it requires a digital experience that commands attention and converts visitors into loyal customers. As a fresh, graduate-led startup, OceanIT is moving away from the outdated agency models of the past. We don't rely on a portfolio of old work; instead, we are driven by the ambition to engineer the most innovative, high-performance websites of today. We believe that your digital presence should be a masterpiece of logic and art, designed to boost your success and, in turn, establish our reputation as the new standard in creative web engineering.</p>
+                    <p>In 2026, the success of your business depends on more than just "being online" it requires a digital experience that commands attention and converts visitors into loyal customers. As a fresh, graduate-led startup, Oceanit is moving away from the outdated agency models of the past. We don't rely on a portfolio of old work. instead, we are driven by the ambition to engineer the most innovative, high-performance websites of today. We believe that your digital presence should be a masterpiece of logic and art, designed to boost your success and, in turn, establish our reputation as the new standard in creative web engineering.</p>
                     <p>Our philosophy is built on a transparent partnership where we grow only when you do. To jumpstart this vision, we are launching an exclusive initiative for 2026 where we offer comprehensive web development solutions at zero upfront cost for selected businesses that possess a truly creative vision. We handle the entire design and build process for free, allowing you to scale your brand without the heavy financial burden of traditional development. In return, we only require a very low monthly payment to cover our ongoing costs for ultra-fast hosting, domain security, and the expert maintenance required to keep your site at the cutting edge. This stress-free, modern approach ensures that our interests are perfectly aligned: we give you our best work to ensure your success, and your success becomes our greatest achievement.</p>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Contact Us Section -->
     <section id="contact-us" class="section contact-section">

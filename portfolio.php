@@ -41,8 +41,10 @@
                 <div class="title-underline"></div>
                 <p class="section-description">A comprehensive showcase of our work and achievements</p>
             </div>
-            <div class="portfolio-grid" id="portfolioContainer">
-                <!-- Portfolio items will be loaded here via lazy loading -->
+            <div class="portfolio-grid portfolio-page-grid" id="portfolioContainer">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <p>Loading portfolio items...</p>
+                </div>
             </div>
             <div class="view-more-container" style="margin-top: 3rem;">
                 <button id="loadMorePortfolio" class="view-more-button" style="display: none;">Load More Projects</button>
@@ -72,53 +74,84 @@
             const loadMoreBtn = document.getElementById('loadMorePortfolio');
             let currentPage = 1;
             let isLoading = false;
+            let hasLoadedFirstPage = false;
             
             function loadPortfolio(page) {
                 if (isLoading) return;
                 isLoading = true;
                 
-                loadMoreBtn.textContent = 'Loading...';
-                loadMoreBtn.disabled = true;
+                if (hasLoadedFirstPage) {
+                    loadMoreBtn.textContent = 'Loading...';
+                    loadMoreBtn.disabled = true;
+                }
                 
                 fetch(`load_more_portfolio.php?page=${page}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            const tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = data.html;
+                            // Clear loading message on first load
+                            if (!hasLoadedFirstPage) {
+                                container.innerHTML = '';
+                                hasLoadedFirstPage = true;
+                            }
                             
-                            // Append new portfolio items with fade-in animation
-                            const newItems = tempDiv.querySelectorAll('.portfolio-item');
-                            newItems.forEach((item, index) => {
-                                item.style.opacity = '0';
-                                item.style.transform = 'translateY(20px)';
-                                container.appendChild(item);
+                            if (data.html && data.html.trim() !== '') {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = data.html;
                                 
-                                // Animate in
-                                setTimeout(() => {
-                                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                                    item.style.opacity = '1';
-                                    item.style.transform = 'translateY(0)';
-                                }, index * 100);
-                            });
-                            
-                            if (data.hasMore) {
-                                loadMoreBtn.style.display = 'inline-block';
-                                loadMoreBtn.textContent = 'Load More Projects';
-                                currentPage++;
+                                // Append new portfolio items with fade-in animation
+                                const newItems = tempDiv.querySelectorAll('.portfolio-item');
+                                if (newItems.length > 0) {
+                                    newItems.forEach((item, index) => {
+                                        item.style.opacity = '0';
+                                        item.style.transform = 'translateY(20px)';
+                                        container.appendChild(item);
+                                        
+                                        // Animate in
+                                        setTimeout(() => {
+                                            item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                            item.style.opacity = '1';
+                                            item.style.transform = 'translateY(0)';
+                                        }, index * 100);
+                                    });
+                                    
+                                    if (data.hasMore) {
+                                        loadMoreBtn.style.display = 'inline-block';
+                                        loadMoreBtn.textContent = 'Load More Projects';
+                                        currentPage++;
+                                    } else {
+                                        loadMoreBtn.style.display = 'none';
+                                    }
+                                } else {
+                                    // No items returned
+                                    if (!hasLoadedFirstPage) {
+                                        container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>No portfolio items available yet.</p></div>';
+                                    }
+                                    loadMoreBtn.style.display = 'none';
+                                }
                             } else {
+                                // Empty HTML response
+                                if (!hasLoadedFirstPage) {
+                                    container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>No portfolio items available yet.</p></div>';
+                                }
                                 loadMoreBtn.style.display = 'none';
                             }
                         } else {
                             console.error('Error loading portfolio:', data.error);
-                            loadMoreBtn.textContent = 'Error loading portfolio';
+                            if (!hasLoadedFirstPage) {
+                                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>Error loading portfolio. Please try again later.</p></div>';
+                            }
+                            loadMoreBtn.textContent = 'Error - Click to Retry';
                         }
                         isLoading = false;
                         loadMoreBtn.disabled = false;
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        loadMoreBtn.textContent = 'Error loading portfolio';
+                        if (!hasLoadedFirstPage) {
+                            container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>Error loading portfolio. Please check your connection and try again.</p></div>';
+                        }
+                        loadMoreBtn.textContent = 'Error - Click to Retry';
                         isLoading = false;
                         loadMoreBtn.disabled = false;
                     });

@@ -445,7 +445,7 @@ body {
     grid-template-columns: 1fr 1fr;
 }
 
-/* Default: Mobile - text first, image second */
+/* Default: Mobile - text first, image second (like Our Story) */
 .story-section-reversed .story-left {
     order: 1;
 }
@@ -462,6 +462,17 @@ body {
 
     .story-section-reversed .story-left {
         order: 2;
+    }
+}
+
+/* Ensure mobile view always shows text first, image second */
+@media (max-width: 968px) {
+    .story-section-reversed .story-left {
+        order: 1 !important;
+    }
+
+    .story-section-reversed .story-image {
+        order: 2 !important;
     }
 }
 
@@ -601,23 +612,58 @@ body {
    PORTFOLIO SECTION
    ======================================== */
 
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
+.portfolio-scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 2rem;
+    padding: 2rem 0;
+    -webkit-overflow-scrolling: touch;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
 
-/* Make portfolio images bigger on larger screens - 2 per row for 100% size increase */
+.portfolio-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Normal grid layout for portfolio page (not index) */
+.portfolio-page-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    width: 100% !important;
+    flex-direction: unset !important;
+}
+
+.portfolio-page-grid .portfolio-item {
+    width: 100% !important;
+    min-width: auto !important;
+    flex: unset !important;
+}
+
 @media (min-width: 1024px) {
-    .portfolio-grid {
+    .portfolio-page-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 3rem;
     }
-    
-    .portfolio-image {
-        aspect-ratio: 16/10;
-    }
+}
+
+.portfolio-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin: 0;
+    width: max-content;
+    padding: 0 2rem;
 }
 
 .portfolio-item {
@@ -625,6 +671,33 @@ body {
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
+    flex: 0 0 auto;
+    width: 300px;
+    scroll-snap-align: start;
+}
+
+/* Horizontal scrolling layout for portfolio */
+@media (min-width: 768px) {
+    .portfolio-item {
+        width: calc(50vw - 3rem);
+        min-width: 350px;
+    }
+}
+
+/* Make portfolio images bigger on larger screens - 2 per row for 100% size increase */
+@media (min-width: 1024px) {
+    .portfolio-item {
+        width: 450px;
+        min-width: 450px;
+    }
+    
+    .portfolio-grid {
+        gap: 3rem;
+    }
+    
+    .portfolio-image {
+        aspect-ratio: 16/10;
+    }
 }
 
 .portfolio-image {
@@ -714,27 +787,101 @@ body {
     background-color: var(--accent-color);
 }
 
-.reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+.reviews-scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 2rem;
+    padding: 2rem 0;
+    -webkit-overflow-scrolling: touch;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.reviews-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Normal grid layout for reviews page (not index) */
+.reviews-page-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
     gap: 2rem;
     margin-bottom: 2rem;
+    width: 100% !important;
+    flex-direction: unset !important;
 }
 
-/* Limit to 4 columns on index page */
-.reviews-section .reviews-grid {
-    grid-template-columns: repeat(4, 1fr);
+.reviews-page-grid .review-card {
+    width: 100% !important;
+    min-width: auto !important;
+    flex: unset !important;
 }
 
-@media (max-width: 1400px) {
-    .reviews-section .reviews-grid {
+@media (min-width: 1400px) {
+    .reviews-page-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .reviews-page-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (max-width: 1024px) {
-    .reviews-section .reviews-grid {
+@media (min-width: 768px) and (max-width: 1023px) {
+    .reviews-page-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.reviews-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin: 0;
+    width: max-content;
+    padding: 0 2rem;
+}
+
+.review-card {
+    flex: 0 0 auto;
+    width: 280px;
+    scroll-snap-align: start;
+}
+
+/* Horizontal scrolling layout for reviews */
+@media (min-width: 768px) {
+    .review-card {
+        width: calc(50vw - 3rem);
+        min-width: 300px;
+    }
+}
+
+/* Limit to 4 columns on index page */
+@media (min-width: 1400px) {
+    .review-card {
+        width: 320px;
+        min-width: 280px;
+    }
+    
+    .reviews-grid {
+        gap: 2rem;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .review-card {
+        width: calc(33.333vw - 2.67rem);
+        min-width: 300px;
     }
 }
 
@@ -982,14 +1129,23 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .services-grid,
-    .portfolio-grid {
+    .services-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
     
-    .reviews-grid {
-        grid-template-columns: 1fr;
+    .portfolio-scroll-container,
+    .reviews-scroll-container {
+        margin: 0 -1.5rem;
+        padding: 0 1.5rem;
+    }
+    
+    .portfolio-item {
+        min-width: calc(85vw - 3rem);
+    }
+    
+    .review-card {
+        min-width: calc(85vw - 3rem);
     }
 }
 

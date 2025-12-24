@@ -41,8 +41,10 @@
                 <div class="title-underline"></div>
                 <p class="section-description">Hear from our satisfied clients about their experience</p>
             </div>
-            <div class="reviews-grid" id="reviewsContainer">
-                <!-- Reviews will be loaded here via lazy loading -->
+            <div class="reviews-grid reviews-page-grid" id="reviewsContainer">
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <p>Loading reviews...</p>
+                </div>
             </div>
             <div class="view-more-container" style="margin-top: 3rem;">
                 <button id="loadMoreReviews" class="view-more-button" style="display: none;">Load More Reviews</button>
@@ -72,53 +74,84 @@
             const loadMoreBtn = document.getElementById('loadMoreReviews');
             let currentPage = 1;
             let isLoading = false;
+            let hasLoadedFirstPage = false;
             
             function loadReviews(page) {
                 if (isLoading) return;
                 isLoading = true;
                 
-                loadMoreBtn.textContent = 'Loading...';
-                loadMoreBtn.disabled = true;
+                if (hasLoadedFirstPage) {
+                    loadMoreBtn.textContent = 'Loading...';
+                    loadMoreBtn.disabled = true;
+                }
                 
                 fetch(`load_more_reviews.php?page=${page}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            const tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = data.html;
+                            // Clear loading message on first load
+                            if (!hasLoadedFirstPage) {
+                                container.innerHTML = '';
+                                hasLoadedFirstPage = true;
+                            }
                             
-                            // Append new reviews with fade-in animation
-                            const newItems = tempDiv.querySelectorAll('.review-card');
-                            newItems.forEach((item, index) => {
-                                item.style.opacity = '0';
-                                item.style.transform = 'translateY(20px)';
-                                container.appendChild(item);
+                            if (data.html && data.html.trim() !== '') {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = data.html;
                                 
-                                // Animate in
-                                setTimeout(() => {
-                                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                                    item.style.opacity = '1';
-                                    item.style.transform = 'translateY(0)';
-                                }, index * 100);
-                            });
-                            
-                            if (data.hasMore) {
-                                loadMoreBtn.style.display = 'inline-block';
-                                loadMoreBtn.textContent = 'Load More Reviews';
-                                currentPage++;
+                                // Append new reviews with fade-in animation
+                                const newItems = tempDiv.querySelectorAll('.review-card');
+                                if (newItems.length > 0) {
+                                    newItems.forEach((item, index) => {
+                                        item.style.opacity = '0';
+                                        item.style.transform = 'translateY(20px)';
+                                        container.appendChild(item);
+                                        
+                                        // Animate in
+                                        setTimeout(() => {
+                                            item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                            item.style.opacity = '1';
+                                            item.style.transform = 'translateY(0)';
+                                        }, index * 100);
+                                    });
+                                    
+                                    if (data.hasMore) {
+                                        loadMoreBtn.style.display = 'inline-block';
+                                        loadMoreBtn.textContent = 'Load More Reviews';
+                                        currentPage++;
+                                    } else {
+                                        loadMoreBtn.style.display = 'none';
+                                    }
+                                } else {
+                                    // No items returned
+                                    if (!hasLoadedFirstPage) {
+                                        container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>No reviews available yet.</p></div>';
+                                    }
+                                    loadMoreBtn.style.display = 'none';
+                                }
                             } else {
+                                // Empty HTML response
+                                if (!hasLoadedFirstPage) {
+                                    container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>No reviews available yet.</p></div>';
+                                }
                                 loadMoreBtn.style.display = 'none';
                             }
                         } else {
                             console.error('Error loading reviews:', data.error);
-                            loadMoreBtn.textContent = 'Error loading reviews';
+                            if (!hasLoadedFirstPage) {
+                                container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>Error loading reviews. Please try again later.</p></div>';
+                            }
+                            loadMoreBtn.textContent = 'Error - Click to Retry';
                         }
                         isLoading = false;
                         loadMoreBtn.disabled = false;
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        loadMoreBtn.textContent = 'Error loading reviews';
+                        if (!hasLoadedFirstPage) {
+                            container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);"><p>Error loading reviews. Please check your connection and try again.</p></div>';
+                        }
+                        loadMoreBtn.textContent = 'Error - Click to Retry';
                         isLoading = false;
                         loadMoreBtn.disabled = false;
                     });
