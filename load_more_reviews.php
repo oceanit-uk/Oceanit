@@ -8,8 +8,9 @@ $perPage = 8;
 $offset = ($page - 1) * $perPage;
 
 try {
-    // Get total count
-    $countStmt = $pdo->query("SELECT COUNT(*) FROM reviews");
+    // Get total count - Security: Using prepared statement
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM reviews");
+    $countStmt->execute();
     $totalItems = $countStmt->fetchColumn();
     $totalPages = ceil($totalItems / $perPage);
     

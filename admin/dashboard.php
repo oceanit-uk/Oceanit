@@ -301,7 +301,7 @@ if (isset($_POST['edit_portfolio'])) {
 }
 
 if (isset($_GET['delete_portfolio'])) {
-    $id = $_GET['delete_portfolio'];
+    $id = (int)$_GET['delete_portfolio']; // Security: Sanitize input
     
     try {
         // Get image path before deleting
@@ -313,16 +313,27 @@ if (isset($_GET['delete_portfolio'])) {
         $stmt = $pdo->prepare("DELETE FROM portfolio WHERE id = ?");
         $stmt->execute([$id]);
         
-        // Delete image file from server
-        if ($image_path && file_exists('../' . $image_path)) {
-            unlink('../' . $image_path);
+        // Delete image file from server - Security: Validate path before deletion
+        if ($image_path && !empty($image_path)) {
+            // Security: Only allow deletion of files in uploads directory
+            $safe_path = '../' . $image_path;
+            $real_path = realpath($safe_path);
+            $uploads_dir = realpath('../uploads/');
+            
+            // Ensure file is within uploads directory (prevent directory traversal)
+            if ($real_path && $uploads_dir && strpos($real_path, $uploads_dir) === 0) {
+                if (file_exists($real_path) && is_file($real_path)) {
+                    @unlink($real_path);
+                }
+            }
         }
         
         $message = 'Portfolio item deleted successfully!';
         $message_type = 'success';
         $active_tab = 'portfolio';
     } catch (PDOException $e) {
-        $message = 'Error deleting portfolio item: ' . $e->getMessage();
+        error_log("Portfolio deletion error: " . $e->getMessage());
+        $message = 'Error deleting portfolio item. Please try again.';
         $message_type = 'error';
     }
 }
@@ -364,7 +375,7 @@ if (isset($_POST['edit_review'])) {
 }
 
 if (isset($_GET['delete_review'])) {
-    $id = $_GET['delete_review'];
+    $id = (int)$_GET['delete_review']; // Security: Sanitize input
     try {
         $stmt = $pdo->prepare("DELETE FROM reviews WHERE id = ?");
         $stmt->execute([$id]);
@@ -372,7 +383,8 @@ if (isset($_GET['delete_review'])) {
         $message_type = 'success';
         $active_tab = 'reviews';
     } catch (PDOException $e) {
-        $message = 'Error deleting review: ' . $e->getMessage();
+        error_log("Review deletion error: " . $e->getMessage());
+        $message = 'Error deleting review. Please try again.';
         $message_type = 'error';
     }
 }

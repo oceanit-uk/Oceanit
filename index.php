@@ -2,11 +2,14 @@
 require_once 'db_connect.php';
 
 // Fetch limited portfolio items (maximum 6 items for index page, rest viewable on portfolio page)
-$portfolio_stmt = $pdo->query("SELECT * FROM portfolio ORDER BY id DESC LIMIT 6");
+// Security: Using prepared statements even for static queries
+$portfolio_stmt = $pdo->prepare("SELECT * FROM portfolio ORDER BY id DESC LIMIT 6");
+$portfolio_stmt->execute();
 $portfolios_index = $portfolio_stmt->fetchAll();
 
-// Fetch limited reviews (4 reviews for index page)
-$reviews_stmt = $pdo->query("SELECT * FROM reviews ORDER BY id DESC LIMIT 3");
+// Fetch limited reviews (3 reviews for index page)
+$reviews_stmt = $pdo->prepare("SELECT * FROM reviews ORDER BY id DESC LIMIT 3");
+$reviews_stmt->execute();
 $reviews_index = $reviews_stmt->fetchAll();
 ?>
 <!DOCTYPE html>

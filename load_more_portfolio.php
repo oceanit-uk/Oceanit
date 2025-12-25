@@ -8,8 +8,9 @@ $perPage = 9;
 $offset = ($page - 1) * $perPage;
 
 try {
-    // Get total count
-    $countStmt = $pdo->query("SELECT COUNT(*) FROM portfolio");
+    // Get total count - Security: Using prepared statement
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM portfolio");
+    $countStmt->execute();
     $totalItems = $countStmt->fetchColumn();
     $totalPages = ceil($totalItems / $perPage);
     
