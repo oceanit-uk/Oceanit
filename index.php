@@ -207,7 +207,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                 </div>
                 <div class="story-text">
                     <p>In 2026, the success of your business depends on more than just "being online" it requires a digital experience that commands attention and converts visitors into loyal customers. As a fresh, graduate-led startup, Oceanit is moving away from the outdated agency models of the past. We don't rely on a portfolio of old work. instead, we are driven by the ambition to engineer the most innovative, high-performance websites of today. We believe that your digital presence should be a masterpiece of logic and art, designed to boost your success and, in turn, establish our reputation as the new standard in creative web engineering.</p>
-                    <p>Our philosophy is built on a transparent partnership where we grow only when you do. To jumpstart this vision, we are launching an exclusive initiative for 2026 where we offer comprehensive web development solutions at zero upfront cost for selected businesses that possess a truly creative vision. We handle the entire design and build process for free, allowing you to scale your brand without the heavy financial burden of traditional development. In return, we only require a very low monthly payment to cover our ongoing costs for ultra-fast hosting, domain security, and the expert maintenance required to keep your site at the cutting edge. This stress-free, modern approach ensures that our interests are perfectly aligned: we give you our best work to ensure your success, and your success becomes our greatest achievement.</p>
+                    <p>Our philosophy is built on a transparent partnership where we grow only when you do. To jumpstart this vision, we are launching an exclusive initiative for 2026 where we offer comprehensive web development solutions at zero upfront cost for selected businesses that possess a truly creative vision. We handle the entire design and build process for free, allowing you to scale your brand without the heavy financial burden of traditional development. In return, we only require a very low monthly payment to cover our ongoing costs for ultra-fast hosting, domain security, and the expert maintenance required to keep your site at the cutting edge. This stress-free, modern approach ensures that our interests are perfectly aligned. we give you our best work to ensure your success, and your success becomes our greatest achievement.</p>
                 </div>
             </div>
         </div>
@@ -225,24 +225,50 @@ $reviews_index = $reviews_stmt->fetchAll();
             <div class="contact-content">
                 <div class="contact-info">
                     <div class="info-item">
-                        <div class="info-icon">📧</div>
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </div>
+                        <div class="info-text">
+                            <h4>Instagram</h4>
+                            <p>@oceanit</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.35.23 2.35.23v2.59h-1.324c-1.304 0-1.711.81-1.711 1.64v1.973h2.922l-.467 3.47h-2.455v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </div>
+                        <div class="info-text">
+                            <h4>Facebook</h4>
+                            <p>@Oceanituk</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
                         <div class="info-text">
                             <h4>Email</h4>
-                            <p>info@oceanit.com</p>
+                            <p>oceanit.uk@gmail.com</p>
                         </div>
                     </div>
                     <div class="info-item">
-                        <div class="info-icon">📞</div>
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
                         <div class="info-text">
                             <h4>Phone</h4>
-                            <p>+1 (555) 123-4567</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon">📍</div>
-                        <div class="info-text">
-                            <h4>Address</h4>
-                            <p>123 Web Development St, Digital City, DC 12345</p>
+                            <p>+44 (770) 658-6203</p>
                         </div>
                     </div>
                 </div>
@@ -264,16 +290,12 @@ $reviews_index = $reviews_stmt->fetchAll();
 
     <!-- Footer -->
     <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="assets/images/logo.png" alt="Oceanit Logo" class="logo">
-                    <span class="logo-text">Oceanit</span>
-                </div>
-                <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Solutions. All rights reserved.</p>
-            </div>
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Solutions. All rights reserved.</p>
         </div>
-    </footer>
+    </div>
+</footer>
 
     <script src="https://player.vimeo.com/api/player.js"></script>
     <script src="assets/script.js"></script>

@@ -55,16 +55,12 @@
 
     <!-- Footer -->
     <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="assets/images/logo.png" alt="Oceanit Logo" class="logo">
-                    <span class="logo-text">Oceanit</span>
-                </div>
-                <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Developers. All rights reserved.</p>
-            </div>
+    <div class="container">
+        <div class="footer-content">
+            <p class="footer-text">&copy; <?php echo date('Y'); ?> Oceanit Web Solutions. All rights reserved.</p>
         </div>
-    </footer>
+    </div>
+</footer>
 
     <script src="assets/script.js"></script>
     <script>
