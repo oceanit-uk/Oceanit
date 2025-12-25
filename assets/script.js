@@ -313,27 +313,58 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(this);
             const submitButton = this.querySelector('.submit-button');
             const originalText = submitButton.textContent;
+            const originalBg = submitButton.style.backgroundColor;
             
             // Show loading state
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
     
-            // Simulate form submission (replace with actual AJAX call)
-            setTimeout(() => {
-                // Success message
-                submitButton.textContent = 'Message Sent!';
-                submitButton.style.backgroundColor = '#10b981';
+            // Submit form via AJAX
+            fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success message
+                    submitButton.textContent = 'Message Sent!';
+                    submitButton.style.backgroundColor = '#10b981';
+                    
+                    // Reset form
+                    this.reset();
+        
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        submitButton.textContent = originalText;
+                        submitButton.style.backgroundColor = originalBg;
+                        submitButton.disabled = false;
+                    }, 3000);
+                } else {
+                    // Error message
+                    submitButton.textContent = data.message || 'Error sending message';
+                    submitButton.style.backgroundColor = '#ef4444';
+                    submitButton.disabled = false;
+                    
+                    // Reset button after 5 seconds
+                    setTimeout(() => {
+                        submitButton.textContent = originalText;
+                        submitButton.style.backgroundColor = originalBg;
+                    }, 5000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitButton.textContent = 'Error sending message. Please try again.';
+                submitButton.style.backgroundColor = '#ef4444';
+                submitButton.disabled = false;
                 
-                // Reset form
-                this.reset();
-    
-                // Reset button after 3 seconds
+                // Reset button after 5 seconds
                 setTimeout(() => {
                     submitButton.textContent = originalText;
-                    submitButton.style.backgroundColor = '';
-                    submitButton.disabled = false;
-                }, 3000);
-            }, 1500);
+                    submitButton.style.backgroundColor = originalBg;
+                }, 5000);
+            });
         });
     }
     

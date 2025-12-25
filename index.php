@@ -198,7 +198,7 @@ $reviews_index = $reviews_stmt->fetchAll();
     </section>
 
         <!-- Beyond the Code Section -->
-        <section id="beyond-code" class="section story-section-split -sectiostoryn-reversed">
+        <section id="beyond-code" class="section story-section-split story-section-reversed">
         <div class="story-split-container">
             <div class="story-image">
                 <img src="assets/images/uk.jpg" alt="Beyond the Code">
@@ -260,7 +260,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                         </div>
                         <div class="info-text">
                             <h4>Email</h4>
-                            <p>oceanit.uk@gmail.com</p>
+                            <p>admin@oceanit.uk</p>
                         </div>
                     </div>
                     <div class="info-item">
@@ -275,7 +275,7 @@ $reviews_index = $reviews_stmt->fetchAll();
                         </div>
                     </div>
                 </div>
-                <form class="contact-form" id="contactForm">
+                <form action="send_email.php" method="POST" class="contact-form" id="contactForm">
                     <div class="form-group">
                         <input type="text" id="name" name="name" placeholder="Your Name" required>
                     </div>

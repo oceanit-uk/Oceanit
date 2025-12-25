@@ -439,6 +439,12 @@ body {
 .story-section-split {
     padding: 0;
     overflow: hidden;
+    background-color: var(--dark-bg);
+}
+
+/* Beyond the Code section - Different background */
+#beyond-code.story-section-split {
+    background-color: var(--accent-color);
 }
 
 .story-section-reversed .story-split-container {
@@ -933,6 +939,10 @@ body {
    CONTACT SECTION
    ======================================== */
 
+.contact-section {
+    background-color: var(--primary-color);
+}
+
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
@@ -1111,26 +1121,33 @@ body {
     }
 
     .story-split-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         min-height: auto;
+        display: flex !important;
+        flex-direction: column;
     }
 
-    /* Mobile: Ensure text comes first, image second */
+    /* Mobile: Ensure text comes first, image second for all story sections */
+    .story-left {
+        order: 1 !important;
+        padding: 4rem 2rem;
+        width: 100%;
+    }
+
+    .story-image {
+        order: 2 !important;
+        height: 60vh;
+        min-height: 400px;
+        width: 100%;
+    }
+
+    /* Ensure reversed section also follows text-first order on mobile */
     .story-section-reversed .story-left {
         order: 1 !important;
     }
 
     .story-section-reversed .story-image {
         order: 2 !important;
-    }
-
-    .story-left {
-        padding: 4rem 2rem;
-    }
-
-    .story-image {
-        height: 60vh;
-        min-height: 400px;
     }
 
     .contact-content {
@@ -1170,13 +1187,33 @@ body {
         padding: 4rem 0;
     }
 
+    /* Ensure story sections stack properly on mobile */
+    .story-split-container {
+        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
     .story-left {
+        order: 1 !important;
         padding: 3rem 1.5rem;
+        width: 100%;
     }
 
     .story-image {
+        order: 2 !important;
         height: 50vh;
         min-height: 300px;
+        width: 100%;
+    }
+
+    /* Ensure reversed section also follows text-first order */
+    .story-section-reversed .story-left {
+        order: 1 !important;
+    }
+
+    .story-section-reversed .story-image {
+        order: 2 !important;
     }
 
     .hero-title {
